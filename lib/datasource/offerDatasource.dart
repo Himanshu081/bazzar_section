@@ -20,6 +20,19 @@ class OfferDataSource{
     }
   }
 
+  Future<List<Offers>> fetchFashionOffers()async{
+    var response =await http.get(Apistring.fashion_offers);
+
+    if(response.statusCode ==200){
+      var data =jsonDecode(response.body);
+      List<Offers>fashionOffers =Apiresult.fromJson(data).products.data;
+      return fashionOffers;
+    }
+    else{
+      throw Exception("Error !!");
+    }
+  }
+
 
   
 }

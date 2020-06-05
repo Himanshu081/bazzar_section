@@ -24,8 +24,9 @@ class OffersListBloc extends Bloc<OfferListEvent,OffersListState>{
     yield OfferListLoading();
     try{
       List<Offers> electronicsOffers = await offerRepository.fetchelectronicsoffers();
+      List<Offers> fashionOffers =await offerRepository.fetchfashionoffers();
 
-      yield OfferListLoaded(electronicsOffers:electronicsOffers );
+      yield OfferListLoaded(electronicsOffers:electronicsOffers ,fashionOffers: fashionOffers);
     }
     catch(e){
       yield OfferListLoadFailure(message: e.toString());

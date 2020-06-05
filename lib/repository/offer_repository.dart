@@ -9,6 +9,9 @@ class OfferRepository{
   Future<List<Offers>> fetchelectronicsoffers()async{
     return await offerDataSource.fetchElectronicsOffers();
   }
+  Future<List<Offers>> fetchfashionoffers()async{
+    return await offerDataSource.fetchFashionOffers();
+  }
 
 
 }

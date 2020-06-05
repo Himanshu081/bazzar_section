@@ -1,3 +1,5 @@
+import 'package:bazzarapp/ui/offerDetails.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:bazzarapp/offerBloc/offer_list_bloc.dart';
@@ -7,6 +9,8 @@ import 'package:bazzarapp/models/model.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'app_widgets.dart';
 import 'package:bazzarapp/Animations/FadeAnimation.dart';
+
+import 'package:page_transition/page_transition.dart';
 
 
 class OfferListPage extends StatefulWidget {
@@ -32,7 +36,7 @@ class _OfferListPageState extends State<OfferListPage> {
         if (state is OfferListLoading) {
           return buildLoadingUI();
         } else if (state is OfferListLoaded) {
-          return Homepage(state.electronicsOffers);
+          return Homepage(state.electronicsOffers,state.fashionOffers);
         } else if (state is OfferListLoadFailure) {
           return buildErrorUI(state.message);
         }
@@ -46,6 +50,7 @@ class _OfferListPageState extends State<OfferListPage> {
 
 class Homepage extends StatelessWidget {
    List<Offers> electronicsoffers;
+   List<Offers> fashionoffers;
 
   Color lightGrey = Color(0xffe8e8ea);
   Color blue = Color(0xff4285f4);
@@ -55,7 +60,7 @@ class Homepage extends StatelessWidget {
   Color yellowGreen = Color(0xff61B329);
   Color babyPink = Color(0xffFFB6C1);
   Color footerColor = Color(0xff87A7A6);
-  Homepage(this.electronicsoffers);
+  Homepage(this.electronicsoffers,this.fashionoffers);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -313,104 +318,119 @@ class Homepage extends StatelessWidget {
                     ),
                     SizedBox(
                       height: 280,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: electronicsoffers.length,
-                        itemBuilder: (context,index){
-                          Offers offer=electronicsoffers[index];
-                          return Container(
-                            margin: EdgeInsets.fromLTRB(7, 0, 0, 20),
-                            width: 170,
-                            child: GestureDetector(
-                              onTap: (){
-                                print(electronicsoffers[index].images);
-                                  print(electronicsoffers[index].images[index].id);
-                                // print(electronicsoffers[index].images[index].id);
-                              },
-                              child: Card(
-                                child: Wrap(
-                                  children: 
-                                  <Widget>[
-                                    // Container(
-                                    //           width: 170,
-                                    //           height: 180,
-                                    //           decoration: BoxDecoration(
-                                    //               border: Border.all(
-                                    //                   color: Colors.black),
-                                    //               image: DecorationImage(
-                                    //                   image: NetworkImage(
-                                    //                       "https://api.pauzr.com/storage/" +
-                                    //                           electronicsoffers[index].images[index].image),
-                                    //                   fit: BoxFit.cover)
-                                                      
-                                    //                   ),
-                                    //         ),
-
-                                              Container(
-                                              height: 100,
-                                              width: 170,
-                                              decoration: BoxDecoration(
+                      child: Transform.translate(
+                        offset: Offset(0, 31),
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: electronicsoffers.length,
+                          itemBuilder: (context,index){
+                            Offers offer=electronicsoffers[index];
+                            List<Images> images = electronicsoffers[index].images;
+                            // List<String> url =electronicsoffers[index].images[0].image.toString();
+                            return Container(
+                              margin: EdgeInsets.fromLTRB(7, 0, 0, 20),
+                              width: 170,
+                              child: GestureDetector(
+                                onTap: (){
+                                  navigateTodetailsPage(context, offer, images);
+                                  // print(electronicsoffers[index].images);
+                                  // print(images.length);
+                                  // for(int i =0;i<images.length;i++){
+                                  //   print(images[i].image);
+                                  // }
+                                  // print(electronicsoffers[index].images[index].id);
+                                },
+                                child: Card(
+                                  child: Wrap(
+                                    children: 
+                                    <Widget>[
+                                      Container(
+                                                width: 170,
+                                                height: 180,
+                                                decoration: BoxDecoration(
                                                   border: Border.all(
-                                                      color: Colors.black)),
-                                              child: Column(
-                                                // mainAxisAlignment: MainAxisAlignment.start,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
+                                                    color: Colors.black
+                                                  )
+                                                
+                                                ),
+                                                child: ClipRRect(
+                                                  child: CachedNetworkImage(
+                                                    imageUrl:"https://api.pauzr.com/storage/"+electronicsoffers[index].images[0].image
+                                                    ,fit: BoxFit.cover,placeholder: (context, url) =>
+                                                  const Center(child:CircularProgressIndicator()
+                                                            ) 
+                                                            ),
+                                                  )
 
-                                                children: <Widget>[
-                                                  Padding(
-                                                    padding: const EdgeInsets
-                                                        .fromLTRB(10, 0, 0, 0),
-                                                    child: Transform(
-                                                      transform:
-                                                          new Matrix4.identity()
-                                                            ..scale(0.69),
-                                                      child: Chip(
-                                                          avatar: CircleAvatar(
-                                                              backgroundColor:
-                                                                  green,
-                                                              child: Icon(
-                                                                Icons
-                                                                    .local_offer,
-                                                                color: Colors
-                                                                    .white,
-                                                              )),
-                                                          backgroundColor:
-                                                              green,
-                                                          label: Text(
-                                                              electronicsoffers[index].store.type +"offer",
-                                                              style: GoogleFonts
-                                                                  .openSans(
-                                                                color: Colors
-                                                                    .white,
-                                                                fontSize: 11,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w600,
-                                                              ))),
-                                                    ),
-                                                  ),
-                                                  Transform.translate(
-                                                    offset: Offset(0, -12),
-                                                    child: Padding(
+                                                ),
+
+                                                Container(
+                                                height: 100,
+                                                width: 170,
+                                                decoration: BoxDecoration(
+                                                    border: Border.all(
+                                                        color: Colors.black)),
+                                                child: Column(
+                                                  // mainAxisAlignment: MainAxisAlignment.start,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+
+                                                  children: <Widget>[
+                                                    Padding(
                                                       padding: const EdgeInsets
-                                                              .fromLTRB(
-                                                          10, 0, 0, 0),
-                                                      child: Text(electronicsoffers[index].coupon.title,
-                                                        
-                                                        style: GoogleFonts
-                                                            .openSans(
-                                                          color: Colors.black,
-                                                          fontSize: 14,
-                                                          fontWeight:
-                                                              FontWeight.w700,
+                                                          .fromLTRB(10, 0, 0, 0),
+                                                      child: Transform(
+                                                        transform:
+                                                            new Matrix4.identity()
+                                                              ..scale(0.69),
+                                                        child: Chip(
+                                                            avatar: CircleAvatar(
+                                                                backgroundColor:
+                                                                    green,
+                                                                child: Icon(
+                                                                  Icons
+                                                                      .local_offer,
+                                                                  color: Colors
+                                                                      .white,
+                                                                )),
+                                                            backgroundColor:
+                                                                green,
+                                                            label: Text(
+                                                                electronicsoffers[index].store.type +" offer",
+                                                                style: GoogleFonts
+                                                                    .openSans(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontSize: 11,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600,
+                                                                ))),
+                                                      ),
+                                                    ),
+                                                    Transform.translate(
+                                                      offset: Offset(0, -12),
+                                                      child: Padding(
+                                                        padding: const EdgeInsets
+                                                                .fromLTRB(
+                                                            10, 0, 0, 0),
+                                                        child: Text(electronicsoffers[index].coupon.title,
+                                                          
+                                                          style: GoogleFonts
+                                                              .openSans(
+                                                            color: Colors.black,
+                                                            fontSize: 14,
+                                                            fontWeight:
+                                                                FontWeight.w700,
+                                                          ),
                                                         ),
                                                       ),
                                                     ),
-                                                  ),
-                                                ],
+                                                  ],
+                                                ),
                                               ),
-                                            )
+                   
+         
 
 
 
@@ -420,41 +440,308 @@ class Homepage extends StatelessWidget {
 
 
 
-                                  ],
-                                  
-                                  )
-                                  
-                                  ,),
-                            ),
 
 
-                          );
+                                    ],
+                                    
+                                    )
+                                    
+                                    ,),
+                              ),
 
 
-
-                        }
-                        
-                        
+                            );
 
 
 
+                          }                  
+                          ),
+                      ),
 
-
-                        
-                        ),
-
-                    )
-
-
+                    ),
                   ],
 
 
                 ),
 
 
-                  )
+                  ),
+
+                   Row(
+                      children: <Widget>[
+                        Expanded(
+                            child: Container(
+                          // margin: const EdgeInsets.only(left:10.0,right: 10.0),
+                          child: Divider(
+                            color: Colors.white60,
+                            height: 65,
+                            thickness: 40,
+                          ),
+                        ))
+                      ],
+                    ),
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 375.0,
+                      decoration: BoxDecoration(color: Colors.lightBlue[100]),
+                      child: Column(
+                        children: <Widget>[
+                          Container(
+                            margin: EdgeInsets.fromLTRB(10, 30, 0, 0),
+                            decoration: BoxDecoration(
+                                // border: Border.all(
+                                //   color: Colors.black,
+
+                                // )
+                                ),
+                            height: 45,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Text(
+                                  "Top Fashion Offers",
+                                  style: GoogleFonts.openSans(
+                                    color: Colors.black,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 20),
+                                  child: ImageIcon(
+                                    AssetImage("images/hanger_icon.png"),
+                                    size: 40,
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                          Transform.translate(
+                            offset: Offset(-110, -8),
+                            child: Text(
+                              "Deals You Cannot miss ",
+                              style: GoogleFonts.openSans(
+                                color: Colors.black,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                              height: 280.0,
+                              child: Transform.translate(
+                                  offset: Offset(0, 31),
+                                  child: ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: fashionoffers.length,
+                                    itemBuilder:  (context,index){
+                                      Offers offer=fashionoffers[index];
+                                      List<Images> images = fashionoffers[index].images;
+                                      return Container(
+                                         margin: EdgeInsets.fromLTRB(7, 0, 0, 20),
+                                         width: 170,
+                                         child: GestureDetector(
+                                           onTap: (){
+                                             navigateTodetailsPage(context, offer, images);
+                                             
+                                           },
+                                           child:Card(
+                                             child: Wrap(
+                                              children: <Widget>[
+                                                Container(
+                                                width: 170,
+                                                height: 180,
+                                                decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                    color: Colors.black
+                                                  )
+                                                
+                                                ),
+                                                child: ClipRRect(
+                                                  child: CachedNetworkImage(
+                                                    imageUrl:"https://api.pauzr.com/storage/"+fashionoffers[index].images[0].image
+                                                    ,fit: BoxFit.cover,placeholder: (context, url) =>
+                                                  const Center(child:CircularProgressIndicator()
+                                                            ) 
+                                                            ),
+                                                  )
+
+                                                ),
 
+                                                   Container(
+                                                height: 100,
+                                                width: 170,
+                                                decoration: BoxDecoration(
+                                                    border: Border.all(
+                                                        color: Colors.black)),
+                                                child: Column(
+                                                  // mainAxisAlignment: MainAxisAlignment.start,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+
+                                                  children: <Widget>[
+                                                    Padding(
+                                                      padding: const EdgeInsets
+                                                          .fromLTRB(10, 0, 0, 0),
+                                                      child: Transform(
+                                                        transform:
+                                                            new Matrix4.identity()
+                                                              ..scale(0.69),
+                                                        child: Chip(
+                                                            avatar: CircleAvatar(
+                                                                backgroundColor:
+                                                                    green,
+                                                                child: Icon(
+                                                                  Icons
+                                                                      .local_offer,
+                                                                  color: Colors
+                                                                      .white,
+                                                                )),
+                                                            backgroundColor:
+                                                                green,
+                                                            label: Text(
+                                                                fashionoffers[index].store.type +" offer",
+                                                                style: GoogleFonts
+                                                                    .openSans(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontSize: 11,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600,
+                                                                ))),
+                                                      ),
+                                                    ),
+                                                    Transform.translate(
+                                                      offset: Offset(0, -12),
+                                                      child: Padding(
+                                                        padding: const EdgeInsets
+                                                                .fromLTRB(
+                                                            10, 0, 0, 0),
+                                                        child: Text(fashionoffers[index].coupon.title,
+                                                          
+                                                          style: GoogleFonts
+                                                              .openSans(
+                                                            color: Colors.black,
+                                                            fontSize: 14,
+                                                            fontWeight:
+                                                                FontWeight.w700,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              ], 
+                                             ),
+
+                                           ) ,
+                                         ),
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                      );
+
+
+
+
+
+                                    }
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    )
+                                  
+                                  )
+                                  )
+                        ],
+                      ),
+                    ),
 
+                      Row(
+                      children: <Widget>[
+                        Expanded(
+                            child: Container(
+                          // margin: const EdgeInsets.only(left:10.0,right: 10.0),
+                          child: Divider(
+                            color: lightGrey,
+                            height: 60,
+                            thickness: 25,
+                          ),
+                        ))
+                      ],
+                    ),
+                    Container(
+                      height: 250,
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(color: footerColor),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                            child: Text(
+                              "Partner with us",
+                              style: GoogleFonts.montserrat(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 8, 10, 0),
+                            child: Text(
+                              "List your business with products/offers on\n                            Pauzr bazzar.",
+                              style: GoogleFonts.montserrat(
+                                fontSize: 15,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(9, 15, 0, 0),
+                            child: FlatButton(
+                                onPressed: () {},
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(18.0),
+                                    side: BorderSide(color: Colors.white)),
+                                child: Text(
+                                  "Contact us",
+                                  style: TextStyle(color: Colors.white),
+                                  // style: TextStyle(color: blue),
+                                )),
+                          ),
+                        ]
+                        ),
 
 
 
@@ -545,7 +832,11 @@ class Homepage extends StatelessWidget {
 
 
 
-            ],
+
+
+                    )
+                    
+                    ],
 
       ) ,
       ),
@@ -553,4 +844,9 @@ class Homepage extends StatelessWidget {
     );
     
   }
+   navigateTodetailsPage(BuildContext context, Offers offer,List<Images> images) {
+
+                                Navigator.push(context,PageTransition(type: PageTransitionType.rightToLeft,child:OfferDetailPage(offer: offer,productImages: images,)));
+
+                               }
 }
