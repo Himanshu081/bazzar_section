@@ -12,6 +12,13 @@ class OfferRepository{
   Future<List<Offers>> fetchfashionoffers()async{
     return await offerDataSource.fetchFashionOffers();
   }
+   Future<List<Offers>> fetchentertainmentoffers()async{
+    return await offerDataSource.fetchEntertainmentOffers();
+  }
+  Future<List<Offers>> fetchfurnitureoffers()async{
+    return await offerDataSource.fetchFurnitureOffers();
+  }
+
 
 
 }

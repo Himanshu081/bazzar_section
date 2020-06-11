@@ -13,8 +13,10 @@ class OfferListLoading extends OffersListState{
 class OfferListLoaded extends OffersListState{
   final List<Offers> electronicsOffers;
   final List<Offers> fashionOffers;
+  final List<Offers> entertaimentOffers;
+  final List<Offers> furnitureOffers;
 
-  OfferListLoaded({@required this.electronicsOffers,this.fashionOffers});
+  OfferListLoaded({@required this.electronicsOffers,this.fashionOffers,this.entertaimentOffers,this.furnitureOffers});
   @override
   
   List<Object> get props => null;

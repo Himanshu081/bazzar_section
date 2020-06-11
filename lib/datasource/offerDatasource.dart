@@ -32,7 +32,30 @@ class OfferDataSource{
       throw Exception("Error !!");
     }
   }
+ Future<List<Offers>> fetchEntertainmentOffers()async{
+    var response =await http.get(Apistring.entertainment_offers);
 
+    if(response.statusCode ==200){
+      var data =jsonDecode(response.body);
+      List<Offers>entertainmentOffers =Apiresult.fromJson(data).products.data;
+      return entertainmentOffers;
+    }
+    else{
+      throw Exception("Error !!");
+    }
+  }
+   Future<List<Offers>> fetchFurnitureOffers()async{
+    var response =await http.get(Apistring.furniture_offers);
+
+    if(response.statusCode ==200){
+      var data =jsonDecode(response.body);
+      List<Offers>furnitureOffers =Apiresult.fromJson(data).products.data;
+      return furnitureOffers;
+    }
+    else{
+      throw Exception("Error !!");
+    }
+  }
 
   
 }
