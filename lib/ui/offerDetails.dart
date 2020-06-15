@@ -21,6 +21,7 @@ class _OfferDetailPageState extends State<OfferDetailPage> {
       Color blue = Color(0xff4285f4);
        Color lightGrey = Color(0xffe8e8ea);
        Color lightgray=Color(0xffD3D3D3);
+       Color chipBackgroundColor = Color(0xFFF6F6F6);
   @override
   Widget build(BuildContext context) {
      var mediaQuery =MediaQuery.of(context);
@@ -45,6 +46,7 @@ class _OfferDetailPageState extends State<OfferDetailPage> {
     
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
         backgroundColor: Colors.white,
         iconTheme: new IconThemeData(color: Colors.black)
       ),
@@ -257,7 +259,9 @@ class _OfferDetailPageState extends State<OfferDetailPage> {
                                          widget.offer.store.type =="Online" ?
                                Container():         
                                  FadeAnimation(1.9,Chip(
-                               label: Text(widget.offer.store.type+" Offer",style: TextStyle(fontSize: 10),))
+                               label: Text(widget.offer.store.type+" Offer",style: TextStyle(fontSize: 10),
+                               ),
+                               backgroundColor: chipBackgroundColor,)
                              ),
                              SizedBox(
                                width: 5,
@@ -265,14 +269,21 @@ class _OfferDetailPageState extends State<OfferDetailPage> {
                              
 
                             FadeAnimation(1.9,Chip(
-                               label: Text(widget.offer.store.name,style: TextStyle(fontSize: 10),))
+                               label: Text(widget.offer.store.name,style: TextStyle(fontSize: 10),
+                               ),backgroundColor: chipBackgroundColor,
+                               
+                               )
                              ),
                              SizedBox(
                                width: 5,
                              ),
                              
                              FadeAnimation(2,Chip(
-                               label: Text("Coupon Expiry: "+widget.offer.coupon.expiryDate,style: TextStyle(fontSize: 10),),)
+                               label: Text("Coupon Expiry: "+widget.offer.coupon.expiryDate,style: TextStyle(fontSize: 10),
+                               )
+                               ,backgroundColor: chipBackgroundColor,
+                               
+                               )
                              )
                           ],
                         ),
@@ -282,15 +293,19 @@ class _OfferDetailPageState extends State<OfferDetailPage> {
                                                       child: Row(
                         children: <Widget>[
                             FadeAnimation(2.1,Chip(
-                                 label: Text(widget.offer.store.category.name,style: TextStyle(fontSize: 10),)
-                               ),),
+                                 label: Text(widget.offer.store.category.name,style: TextStyle(fontSize: 10),
+                                 ),backgroundColor: chipBackgroundColor,
+                               ),
+                               ),
                                SizedBox(
                                  width: 5,
                                ),
                                widget.offer.store.type =="Offline" ?
                                FadeAnimation(2.1,Chip(
                                  label: Text("City:" +widget.offer.store.city,style: TextStyle(fontSize: 10),),
-                               )): FadeAnimation(2.1,Chip(
+                               backgroundColor: chipBackgroundColor,)
+                               ): FadeAnimation(2.1,Chip(
+                                 backgroundColor: chipBackgroundColor,
                                  label: Text(widget.offer.store.type+" Offer",style: TextStyle(fontSize: 10),),
                                ))
                                ,
@@ -298,6 +313,7 @@ class _OfferDetailPageState extends State<OfferDetailPage> {
                                  width: 5,
                                ),
                                FadeAnimation(2.2,Chip(
+                                 backgroundColor: chipBackgroundColor,
                                  label: Text("Coupon Start Date: "+widget.offer.coupon.startDate,style: TextStyle(fontSize: 10),),
                                )),
                                
